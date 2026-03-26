@@ -46,7 +46,15 @@
 
             <div class="action-footer">
                 <button onclick="window.location.href='index.html'" class="btn btn-secondary">Back to Home</button>
+                <button id="view-answers-btn" class="btn btn-purple">View Detailed Answers</button>
                 <button onclick="window.location.href='exam.html'" class="btn btn-primary">Take Another Test</button>
+            </div>
+        </div>
+
+        <div id="answer-key-section" class="answer-key-container hidden">
+            <h2>Detailed Answer Key</h2>
+            <div id="answer-key-list" class="answer-key-list">
+                <!-- Answer items injected here -->
             </div>
         </div>
     </main>
@@ -56,21 +64,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        // Result page initialization
-        window.onload = () => {
-            const results = JSON.parse(localStorage.getItem('examResults'));
-            if (!results) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            document.getElementById('score-percentage').innerText = results.percentage + '%';
-            document.getElementById('total-questions').innerText = results.total;
-            document.getElementById('attempted').innerText = results.attempted;
-            document.getElementById('correct-answers').innerText = results.correct;
-            document.getElementById('wrong-answers').innerText = results.wrong;
-        };
-    </script>
 </body>
 </html>

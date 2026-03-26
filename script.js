@@ -324,15 +324,23 @@ function calculateResults() {
     let wrong = 0;
     let attempted = 0;
 
-    questions.forEach(q => {
-        if (userAnswers[q.id] !== undefined) {
+    const detailedResults = questions.map(q => {
+        const userChoice = userAnswers[q.id];
+        const status = questionStatus[q.id];
+        const isCorrect = userChoice === q.answer;
+
+        if (userChoice !== undefined) {
             attempted++;
-            if (userAnswers[q.id] === q.answer) {
-                correct++;
-            } else {
-                wrong++;
-            }
+            if (isCorrect) correct++;
+            else wrong++;
         }
+
+        return {
+            ...q,
+            userChoice,
+            status,
+            isCorrect
+        };
     });
 
     const percentage = ((correct / questions.length) * 100).toFixed(2);
@@ -346,7 +354,79 @@ function calculateResults() {
     };
 
     localStorage.setItem('examResults', JSON.stringify(examResults));
+    localStorage.setItem('detailedResults', JSON.stringify(detailedResults));
     window.location.href = 'result.html';
+}
+
+/**
+ * Result Page Logic
+ */
+function initResultPage() {
+    const results = JSON.parse(localStorage.getItem('examResults'));
+    const detailedData = JSON.parse(localStorage.getItem('detailedResults'));
+    
+    if (!results || !detailedData) return;
+
+    // Summary stats
+    document.getElementById('score-percentage').innerText = results.percentage + '%';
+    document.getElementById('total-questions').innerText = results.total;
+    document.getElementById('attempted').innerText = results.attempted;
+    document.getElementById('correct-answers').innerText = results.correct;
+    document.getElementById('wrong-answers').innerText = results.wrong;
+
+    // View Answer Key Toggle
+    const viewBtn = document.getElementById('view-answers-btn');
+    const section = document.getElementById('answer-key-section');
+    
+    if (viewBtn && section) {
+        viewBtn.onclick = () => {
+            section.classList.toggle('hidden');
+            if (!section.classList.contains('hidden')) {
+                renderAnswerKey(detailedData);
+                viewBtn.innerText = "Hide Detailed Answers";
+                section.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                viewBtn.innerText = "View Detailed Answers";
+            }
+        };
+    }
+}
+
+function renderAnswerKey(data) {
+    const list = document.getElementById('answer-key-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    data.forEach((q, idx) => {
+        const card = document.createElement('div');
+        const isAnswered = q.userChoice !== undefined;
+        const isMarked = q.status === 'marked';
+        
+        card.className = `answer-card ${isAnswered ? (q.isCorrect ? 'correct-card' : 'wrong-card') : ''} ${isMarked ? 'marked-card' : ''}`;
+        
+        let content = '';
+        if (isMarked) {
+            content += `<span class="review-badge">Marked for Review</span>`;
+        }
+        
+        content += `<p class="q-text">Q${idx + 1}: ${q.question}</p>`;
+        
+        q.options.forEach((opt, oIdx) => {
+            let optClass = 'option-review';
+            if (oIdx === q.answer) optClass += ' correct-ans';
+            else if (isAnswered && oIdx === q.userChoice && !q.isCorrect) optClass += ' wrong-ans';
+            else if (isAnswered && oIdx === q.userChoice) optClass += ' user-selection';
+
+            content += `<div class="${optClass}">
+                ${String.fromCharCode(65 + oIdx)}. ${opt}
+                ${oIdx === q.answer ? ' <b>(Correct Answer)</b>' : ''}
+                ${isAnswered && oIdx === q.userChoice && !q.isCorrect ? ' <b>(Your Choice)</b>' : ''}
+            </div>`;
+        });
+
+        card.innerHTML = content;
+        list.appendChild(card);
+    });
 }
 
 function autoSubmit() {
@@ -361,7 +441,11 @@ function saveState() {
 
 // Start Initialization
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.body.classList.contains('exam-body')) init();
+        if (document.body.classList.contains('result-body')) initResultPage();
+    });
 } else {
-    init();
+    if (document.body.classList.contains('exam-body')) init();
+    if (document.body.classList.contains('result-body')) initResultPage();
 }

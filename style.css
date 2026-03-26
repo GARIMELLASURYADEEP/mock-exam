@@ -433,6 +433,65 @@ h1 {
 .green-text { color: var(--success); }
 .red-text { color: var(--danger); }
 
+.hidden { display: none; }
+
+/* Answer Key Styles */
+.answer-key-container {
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.answer-key-container h2 {
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary);
+}
+
+.answer-key-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.answer-card {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+}
+
+.answer-card.correct-card { border-left: 6px solid var(--success); background: #f0fff4; }
+.answer-card.wrong-card { border-left: 6px solid var(--danger); background: #fff5f5; }
+.answer-card.marked-card { border-top: 4px solid var(--purple); }
+
+.review-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--purple);
+    color: white;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.answer-card .q-text { font-weight: 700; margin-bottom: 15px; }
+
+.option-review {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.option-review.user-selection { background: #eee; border: 1px solid #ccc; }
+.option-review.correct-ans { background: var(--success); color: white; font-weight: 600; }
+.option-review.wrong-ans { background: var(--danger); color: white; }
+
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }

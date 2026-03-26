@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTA Mock Test - Result</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="result-body">
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <img src="https://nta.ac.in/img/nta_logo.png" alt="NTA Logo" onerror="this.src='https://via.placeholder.com/150x50?text=Mock+Test'">
+                <span>Exam Result Summary</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="result-card">
+            <h1>Test Results</h1>
+            <div class="score-circle">
+                <span id="score-percentage">0%</span>
+                <p>Overall Score</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Total Questions</span>
+                    <span id="total-questions" class="stat-value">30</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Attempted</span>
+                    <span id="attempted" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Correct</span>
+                    <span id="correct-answers" class="stat-value green-text">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Wrong</span>
+                    <span id="wrong-answers" class="stat-value red-text">0</span>
+                </div>
+            </div>
+
+            <div class="action-footer">
+                <button onclick="window.location.href='index.html'" class="btn btn-secondary">Back to Home</button>
+                <button onclick="window.location.href='exam.html'" class="btn btn-primary">Take Another Test</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 NTA-Style Mock Test Platform. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Result page initialization
+        window.onload = () => {
+            const results = JSON.parse(localStorage.getItem('examResults'));
+            if (!results) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('score-percentage').innerText = results.percentage + '%';
+            document.getElementById('total-questions').innerText = results.total;
+            document.getElementById('attempted').innerText = results.attempted;
+            document.getElementById('correct-answers').innerText = results.correct;
+            document.getElementById('wrong-answers').innerText = results.wrong;
+        };
+    </script>
+</body>
+</html>

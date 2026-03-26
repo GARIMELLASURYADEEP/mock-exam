@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTA Mock Test - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <img src="https://nta.ac.in/img/nta_logo.png" alt="NTA Logo" onerror="this.src='https://via.placeholder.com/150x50?text=Mock+Test'">
+                <span>Online Mock Test Platform</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container instructions-section">
+        <div class="card">
+            <h1>General Instructions</h1>
+            <div class="instructions-content">
+                <p>Please read the following instructions carefully before starting the test:</p>
+                <ul>
+                    <li>The duration of the test is <strong>30 minutes</strong>.</li>
+                    <li>The test consists of <strong>30 multiple-choice questions</strong> randomly selected.</li>
+                    <li>Each question has four options. Only one option is correct.</li>
+                    <li>There is no negative marking for incorrect answers.</li>
+                    <li>Total score will be displayed at the end of the test.</li>
+                </ul>
+
+                <h3>Question Palette Symbols:</h3>
+                <div class="symbols-grid">
+                    <div class="symbol-item"><span class="badge grey"></span> Not Visited</div>
+                    <div class="symbol-item"><span class="badge red"></span> Not Answered</div>
+                    <div class="symbol-item"><span class="badge green"></span> Answered</div>
+                    <div class="symbol-item"><span class="badge purple"></span> Marked for Review</div>
+                </div>
+
+                <div class="action-footer">
+                    <button id="start-test-btn" class="btn btn-primary">Start Examination</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 NTA-Style Mock Test Platform. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialization for the home page
+        document.getElementById('start-test-btn').onclick = () => {
+            // Logic to clear old data and redirect
+            localStorage.clear();
+            window.location.href = 'exam.html';
+        };
+    </script>
+</body>
+</html>

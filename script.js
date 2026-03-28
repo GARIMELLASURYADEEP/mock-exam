@@ -410,8 +410,8 @@ const QUESTION_BANK = [
 ];
 
 // Configuration
-const TEST_DURATION_MINS = 30;
-const TOTAL_QUESTIONS_TO_SELECT = 30;
+const TEST_DURATION_MINS = 100;
+const TOTAL_QUESTIONS_TO_SELECT = 100;
 
 // State Variables
 let questions = [];

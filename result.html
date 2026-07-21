@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTA Mock Test - Result</title>
+    <title>Unity3D Exam Arena - Results</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -11,24 +11,24 @@
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <img src="https://nta.ac.in/img/nta_logo.png" alt="NTA Logo" onerror="this.src='https://via.placeholder.com/150x50?text=Mock+Test'">
-                <span>Exam Result Summary</span>
+                <div class="logo-icon">🎮</div>
+                <span>Mission Results</span>
             </div>
         </div>
     </header>
 
     <main class="container">
         <div class="result-card">
-            <h1>Test Results</h1>
+            <h1>Mission Summary</h1>
             <div class="score-circle">
                 <span id="score-percentage">0%</span>
-                <p>Overall Score</p>
+                <p>Score</p>
             </div>
 
             <div class="stats-grid">
                 <div class="stat-item">
                     <span class="stat-label">Total Questions</span>
-                    <span id="total-questions" class="stat-value">100</span>
+                    <span id="total-questions" class="stat-value">0</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Attempted</span>
@@ -42,25 +42,25 @@
                     <span class="stat-label">Wrong</span>
                     <span id="wrong-answers" class="stat-value red-text">0</span>
                 </div>
+                <div class="stat-item">
+                    <span class="stat-label">Net Score</span>
+                    <span id="net-score" class="stat-value green-text">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Negative Marks</span>
+                    <span id="negative-marks" class="stat-value red-text">0</span>
+                </div>
             </div>
 
             <div class="action-footer">
-                <button onclick="window.location.href='index.html'" class="btn btn-secondary">Back to Home</button>
-                <button id="view-answers-btn" class="btn btn-purple">View Detailed Answers</button>
-                <button onclick="window.location.href='exam.html'" class="btn btn-primary">Take Another Test</button>
-            </div>
-        </div>
-
-        <div id="answer-key-section" class="answer-key-container hidden">
-            <h2>Detailed Answer Key</h2>
-            <div id="answer-key-list" class="answer-key-list">
-                <!-- Answer items injected here -->
+                <button onclick="window.location.href='index.html'" class="btn btn-secondary">Back to Hub</button>
+                <button onclick="window.location.href='exam.html'" class="btn btn-primary">Replay Mission</button>
             </div>
         </div>
     </main>
 
     <footer class="main-footer">
-        <p>&copy; 2026 NTA-Style Mock Test Platform. All rights reserved.</p>
+        <p>© 2026 Unity3D Exam Arena. Ready for your next challenge.</p>
     </footer>
 
     <script src="script.js"></script>

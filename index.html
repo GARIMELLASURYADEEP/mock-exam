@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTA Mock Test - Home</title>
+    <title>Unity3D Exam Arena - Home</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -11,26 +11,25 @@
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <img src="https://nta.ac.in/img/nta_logo.png" alt="NTA Logo" onerror="this.src='https://via.placeholder.com/150x50?text=Mock+Test'">
-                <span>Online Mock Test Platform</span>
+                <div class="logo-icon">🎮</div>
+                <span>Unity3D Exam Arena</span>
             </div>
         </div>
     </header>
 
     <main class="container instructions-section">
         <div class="card">
-            <h1>General Instructions</h1>
+            <h1>Mission Brief</h1>
             <div class="instructions-content">
-                <p>Please read the following instructions carefully before starting the test:</p>
+                <p>Welcome to your gaming-themed exam portal. This round features 100 questions, 120 minutes total, 1 mark for each correct answer, and a 1-mark penalty for every 4 wrong answers.</p>
                 <ul>
-                    <li>The duration of the test is <strong>100 minutes</strong>.</li>
-                    <li>The test consists of <strong>100 multiple-choice questions</strong> randomly selected.</li>
-                    <li>Each question has four options. Only one option is correct.</li>
-                    <li>There is no negative marking for incorrect answers.</li>
-                    <li>Total score will be displayed at the end of the test.</li>
+                    <li>Mission size: 100 questions per round.</li>
+                    <li>Time limit: 120 minutes for the full exam.</li>
+                    <li>Scoring: +1 for each correct answer and -1 for every 4 incorrect answers.</li>
+                    <li>Answers and scoring will update automatically after you start the mission.</li>
                 </ul>
 
-                <h3>Question Palette Symbols:</h3>
+                <h3>Quest Symbols</h3>
                 <div class="symbols-grid">
                     <div class="symbol-item"><span class="badge grey"></span> Not Visited</div>
                     <div class="symbol-item"><span class="badge red"></span> Not Answered</div>
@@ -39,21 +38,19 @@
                 </div>
 
                 <div class="action-footer">
-                    <button id="start-test-btn" class="btn btn-primary">Start Examination</button>
+                    <button id="start-test-btn" class="btn btn-primary">Start Mission</button>
                 </div>
             </div>
         </div>
     </main>
 
     <footer class="main-footer">
-        <p>&copy; 2026 NTA-Style Mock Test Platform. All rights reserved.</p>
+        <p>© 2026 Unity3D Exam Arena. Ready for your next challenge.</p>
     </footer>
 
     <script src="script.js"></script>
     <script>
-        // Initialization for the home page
         document.getElementById('start-test-btn').onclick = () => {
-            // Logic to clear old data and redirect
             localStorage.clear();
             window.location.href = 'exam.html';
         };

@@ -504,16 +504,62 @@
 const EXAM_QUESTION_BANK = QUESTION_BANK.slice(0, 100);
 const EXAM_DURATION_SECONDS = 120 * 60;
 const NEGATIVE_MARKING_INTERVAL = 4;
+const STORAGE_KEY = 'unity-exam-state-v1';
 
-const state = {
-  currentQuestion: 0,
-  answers: {},
-  markedForReview: [],
-  timeRemaining: EXAM_DURATION_SECONDS,
-  submitted: false,
-  timeExpired: false,
-  timerStarted: false
-};
+function createInitialState() {
+  return {
+    currentQuestion: 0,
+    answers: {},
+    markedForReview: [],
+    timeRemaining: EXAM_DURATION_SECONDS,
+    submitted: false,
+    timeExpired: false,
+    timerStarted: false
+  };
+}
+
+function loadStateFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...createInitialState(),
+      ...parsed,
+      answers: parsed.answers || {},
+      markedForReview: parsed.markedForReview || []
+    };
+  } catch (error) {
+    console.warn('Unable to load exam state:', error);
+    return null;
+  }
+}
+
+function saveStateToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      ...state,
+      answers: state.answers || {},
+      markedForReview: state.markedForReview || []
+    }));
+  } catch (error) {
+    console.warn('Unable to save exam state:', error);
+  }
+}
+
+function resetStoredState() {
+  Object.assign(state, createInitialState());
+  saveStateToStorage();
+}
+
+const state = loadStateFromStorage() || createInitialState();
+
+if (new URLSearchParams(window.location.search).get('reset') === '1') {
+  resetStoredState();
+}
+
+let timerIntervalId = null;
 
 function getCurrentQuestion() {
   return EXAM_QUESTION_BANK[state.currentQuestion] || null;
@@ -583,6 +629,7 @@ function renderExamView() {
       `;
       label.addEventListener('click', () => {
         state.answers[state.currentQuestion] = index;
+        saveStateToStorage();
         renderExamView();
       });
       optionsContainer.appendChild(label);
@@ -600,17 +647,21 @@ function updateTimerDisplay() {
 }
 
 function startTimer() {
-  if (state.timerStarted) return;
+  if (timerIntervalId !== null) return;
   state.timerStarted = true;
   updateTimerDisplay();
 
-  const timerInterval = setInterval(() => {
+  timerIntervalId = setInterval(() => {
     state.timeRemaining -= 1;
+    saveStateToStorage();
     updateTimerDisplay();
 
     if (state.timeRemaining <= 0) {
-      clearInterval(timerInterval);
+      clearInterval(timerIntervalId);
+      timerIntervalId = null;
       state.timeExpired = true;
+      state.submitted = true;
+      saveStateToStorage();
       window.location.href = 'result.html';
     }
   }, 1000);
@@ -626,8 +677,8 @@ function renderResultView() {
   const negativeMarks = document.getElementById('negative-marks');
 
   const total = EXAM_QUESTION_BANK.length;
-  const answered = Object.keys(state.answers).length;
-  const correct = Object.entries(state.answers).filter(([index, answer]) => {
+  const answered = Object.keys(state.answers || {}).filter((index) => state.answers[index] !== undefined && state.answers[index] !== null).length;
+  const correct = Object.entries(state.answers || {}).filter(([index, answer]) => {
     const question = EXAM_QUESTION_BANK[Number(index)];
     return question && question.answer === answer;
   }).length;
@@ -653,8 +704,9 @@ function initializeExamPage() {
   const saveNextBtn = document.getElementById('save-next-btn');
   if (saveNextBtn) {
     saveNextBtn.addEventListener('click', () => {
-      if (!QUESTION_BANK.length) return;
-      state.currentQuestion = Math.min(state.currentQuestion + 1, QUESTION_BANK.length - 1);
+      if (!EXAM_QUESTION_BANK.length) return;
+      state.currentQuestion = Math.min(state.currentQuestion + 1, EXAM_QUESTION_BANK.length - 1);
+      saveStateToStorage();
       renderExamView();
     });
   }
@@ -662,8 +714,9 @@ function initializeExamPage() {
   const prevBtn = document.getElementById('prev-btn');
   if (prevBtn) {
     prevBtn.addEventListener('click', () => {
-      if (!QUESTION_BANK.length) return;
+      if (!EXAM_QUESTION_BANK.length) return;
       state.currentQuestion = Math.max(state.currentQuestion - 1, 0);
+      saveStateToStorage();
       renderExamView();
     });
   }
@@ -672,6 +725,7 @@ function initializeExamPage() {
   if (clearResponseBtn) {
     clearResponseBtn.addEventListener('click', () => {
       delete state.answers[state.currentQuestion];
+      saveStateToStorage();
       renderExamView();
     });
   }
@@ -679,13 +733,14 @@ function initializeExamPage() {
   const markReviewBtn = document.getElementById('mark-review-btn');
   if (markReviewBtn) {
     markReviewBtn.addEventListener('click', () => {
-      if (!QUESTION_BANK.length) return;
+      if (!EXAM_QUESTION_BANK.length) return;
       if (!state.markedForReview.includes(state.currentQuestion)) {
         state.markedForReview.push(state.currentQuestion);
       }
-      if (state.currentQuestion < QUESTION_BANK.length - 1) {
+      if (state.currentQuestion < EXAM_QUESTION_BANK.length - 1) {
         state.currentQuestion += 1;
       }
+      saveStateToStorage();
       renderExamView();
     });
   }
@@ -706,6 +761,7 @@ function initializeExamPage() {
     });
     confirmBtn.addEventListener('click', () => {
       state.submitted = true;
+      saveStateToStorage();
       window.location.href = 'result.html';
     });
   }
